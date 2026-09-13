@@ -114,9 +114,19 @@ Trancycle's opportunity is a narrower, cleaner, source-conscious Norwegian exper
 
 Use one Markdown file per concept in `src/content/terms/`, with structured YAML front matter and optional longer editorial notes in the Markdown body.
 
+In this model, a concept is one distinct meaning or thing in the cycling domain, while a term is a language-specific label used for that concept.
+
+For example, the bicycle component identified by English `headset` and Bokmål `styrelager` is one concept with two language labels.
+
+English `manual` as a riding technique and `manual` as an instruction book are two concepts because they describe different things, even though the English spelling is identical.
+
 Generate JSON and CSV downloads from those files during the build.
 
 This arrangement provides readable reviews, small diffs, stable links, validation, and room for prose without forcing contributors to edit one large data file.
+
+One file per concept is the maintainer-facing storage format, not a requirement that every contributor understand Markdown, YAML, Git, or the schema.
+
+It avoids merge conflicts between unrelated suggestions, lets a reviewer see the complete history of one meaning, and keeps its translations, definition, sources, relations, and images together.
 
 A single JSON file would be acceptable for 147 short pairs, but it becomes unpleasant when each entry gains definitions, sources, relations, review metadata, and licensed images.
 
@@ -127,6 +137,22 @@ Airtable can remain available for a short migration window, but it should be fro
 If a nontechnical editorial workflow later becomes a real need, reintroduce a CMS only after identifying who edits, how often, and which review controls are missing from pull requests.
 
 Do not design that complexity into version one speculatively.
+
+### Contribution workflow
+
+The easiest public contribution path should be a short GitHub issue form for suggesting a concept, correction, or translation.
+
+The form should ask for the term, language, intended meaning, cycling context, and any supporting source without exposing the internal schema.
+
+A maintainer or agent can then check the suggestion and create or update the appropriate concept file through a pull request.
+
+Experienced contributors may edit a concept file directly, but that should be an optional fast path rather than the front door.
+
+Every concept page should link to a prefilled contribution form carrying the concept ID and URL, so reporting an error takes one interaction.
+
+New-language contributions should use the same workflow and add another language key to the existing concept instead of duplicating the concept page.
+
+Provisional contributions can be published with a visible review state when their meaning is useful but their terminology or evidence still needs expert review.
 
 ### Why Airtable should leave the delivery path
 
@@ -200,6 +226,8 @@ The exact wording above is illustrative rather than an approved term entry.
 The minimum required fields for launch should be `id`, `slug`, one English term, one Bokmål term, at least one domain, and editorial status.
 
 Definitions and references can be introduced progressively, but the site should visually distinguish reviewed entries from provisional ones.
+
+The `terms` map is deliberately language-extensible, so later records can add `nn`, `sv`, `da`, `de`, or another BCP 47 language key without changing the concept identity.
 
 Recommended fields are:
 
@@ -649,9 +677,31 @@ Defer the following until usage proves the need:
 
 - A picture for every record.
 
-- Full Nynorsk coverage.
+- Additional complete language editions beyond the initial English/Bokmål experience.
 
 - Progressive Web App packaging.
+
+## Future opportunities
+
+### Additional languages
+
+The data model should support more languages from the first implementation even though the launch interface focuses on English and Bokmål.
+
+A new translation should normally be attached to an existing concept ID, which allows definitions, diagrams, sources, and relations to be shared rather than copied.
+
+Language-specific preferred terms, alternatives, definitions, notes, and review status should remain independent because a well-reviewed English/Bokmål entry does not automatically validate a Swedish, Danish, German, or Nynorsk term.
+
+Search and page templates should iterate over available language data instead of hard-coding exactly two fields.
+
+The interface can still foreground a chosen pair and reveal other languages progressively as they become available.
+
+### Termportalen
+
+Termportalen should be treated as a future partnership and distribution channel, not a launch dependency.
+
+After Trancycle has stable concept IDs, explicit language codes, definitions, sources, review status, and a clear data license, the maintainers should contact Termportalen to discuss importing, linking, or federating the collection.^4
+
+Trancycle should retain its focused public site even if the terminology is later discoverable through Termportalen because the cycling-specific browsing, diagrams, contribution flow, and downloadable dataset serve a different product need.
 
 ## Success criteria
 
