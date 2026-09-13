@@ -1,0 +1,26 @@
+---
+id: front-mech
+slug: front-mech
+domains:
+  - Sykkeldeler og utstyr
+terms:
+  en:
+    - text: front mech
+      status: preferred
+  nb:
+    - text: frontgir
+      status: preferred
+definition: {}
+notes:
+  nb:
+    - Britisk.
+relations:
+  broader: []
+  narrower: []
+  related:
+    - front-derailleur
+sources: []
+review:
+  status: provisional
+legacy_category: component
+---
