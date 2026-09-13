@@ -1,0 +1,145 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  structuredData?: Record<string, unknown>;
+}
+
+const {
+  title = "Trancycle — engelsk–norsk sykkelordbok",
+  description = "En rask, åpen og community-drevet ordliste for engelske og norske sykkelbegrep.",
+  structuredData,
+} = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta
+      name="theme-color"
+      content="#f4f2ed"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#11130f"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem("trancycle-theme");
+          if (saved === "light" || saved === "dark")
+            document.documentElement.dataset.theme = saved;
+        } catch {}
+      })();
+    </script>
+    {structuredData && (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(structuredData)}
+      ></script>
+    )}
+  </head>
+  <body>
+    <a class="skip-link" href="#content">
+      Hopp til innhold
+    </a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="wordmark" href="/" aria-label="Trancycle, forsiden">
+          <span>TRAN</span>
+          <span>CYCLE</span>
+        </a>
+        <nav class="site-nav" aria-label="Hovedmeny">
+          <a href="/">Begrep</a>
+          <a href="/data/terms.json">JSON</a>
+          <a href="/data/terms.csv">CSV</a>
+          <a href="https://github.com/mikaello/trancycle">GitHub</a>
+        </nav>
+        <div class="theme-switcher" aria-label="Fargetema">
+          <button
+            type="button"
+            data-set-theme="system"
+            aria-label="Bruk systemtema"
+            title="Systemtema"
+          >
+            A
+          </button>
+          <button
+            type="button"
+            data-set-theme="light"
+            aria-label="Bruk lyst tema"
+            title="Lyst tema"
+          >
+            ☀
+          </button>
+          <button
+            type="button"
+            data-set-theme="dark"
+            aria-label="Bruk mørkt tema"
+            title="Mørkt tema"
+          >
+            ●
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div>
+        <p>Trancycle er en åpen, community-drevet sykkelordbok.</p>
+        <p>Engelsk · Norsk bokmål · Flere språk senere</p>
+      </div>
+      <a href="https://github.com/mikaello/trancycle/issues/new?template=new-term.yml">
+        Foreslå et begrep ↗
+      </a>
+    </footer>
+    <script>
+      const themeButtons =
+        document.querySelectorAll<HTMLButtonElement>("[data-set-theme]");
+      let savedTheme = "system";
+      try {
+        savedTheme = localStorage.getItem("trancycle-theme") ?? "system";
+      } catch {}
+
+      const applyTheme = (theme: string) => {
+        if (theme === "system") {
+          delete document.documentElement.dataset.theme;
+          try {
+            localStorage.removeItem("trancycle-theme");
+          } catch {}
+        } else {
+          document.documentElement.dataset.theme = theme;
+          try {
+            localStorage.setItem("trancycle-theme", theme);
+          } catch {}
+        }
+
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.setTheme === theme),
+          );
+        });
+      };
+
+      applyTheme(savedTheme);
+      themeButtons.forEach((button) =>
+        button.addEventListener("click", () =>
+          applyTheme(button.dataset.setTheme!),
+        ),
+      );
+    </script>
+  </body>
+</html>

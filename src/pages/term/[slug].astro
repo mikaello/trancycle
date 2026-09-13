@@ -1,0 +1,215 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  alternativeTerms,
+  languageNames,
+  preferredTerm,
+  termHref,
+  type TermEntry,
+} from "../../lib/terms";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("terms");
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry, entries },
+  }));
+}
+
+interface Props {
+  entry: TermEntry;
+  entries: TermEntry[];
+}
+
+const { entry, entries } = Astro.props as Props;
+const { data } = entry;
+const languages = Object.keys(data.terms);
+const entryById = new Map(
+  entries.map((candidate) => [candidate.data.id, candidate]),
+);
+const relationGroups = [
+  ["Overordnet", data.relations.broader],
+  ["Underordnet", data.relations.narrower],
+  ["Relatert", data.relations.related],
+] as const;
+const correctionTitle = encodeURIComponent(
+  `correction: ${preferredTerm(entry, "en")} [${data.id}]`,
+);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "DefinedTerm",
+  "@id": `/term/${data.slug}/#concept`,
+  name: preferredTerm(entry, "en"),
+  description: data.definition.nb ?? data.definition.en,
+  inDefinedTermSet: "/",
+  termCode: data.id,
+};
+---
+
+<BaseLayout
+  title={`${preferredTerm(entry, "en")} / ${preferredTerm(entry, "nb")} — Trancycle`}
+  description={
+    data.definition.nb ??
+    `${preferredTerm(entry, "en")} heter ${preferredTerm(entry, "nb")} på norsk.`
+  }
+  structuredData={structuredData}
+>
+  <article class="concept shell">
+    <nav class="breadcrumb" aria-label="Brødsmuler">
+      <a href="/">Ordlisten</a>
+      <span>/</span>
+      <span>{data.id}</span>
+    </nav>
+
+    <header class="concept__header">
+      <div class="concept__number" aria-hidden="true">
+        #{data.id.toUpperCase()}
+      </div>
+      <div class="concept__terms">
+        {languages.map((language, index) => (
+          <div class="concept__term">
+            <p>{languageNames[language] ?? language.toUpperCase()}</p>
+            {index === 0 ? (
+              <h1>{preferredTerm(entry, language)}</h1>
+            ) : (
+              <h2>{preferredTerm(entry, language)}</h2>
+            )}
+            {alternativeTerms(entry, language).length > 0 && (
+              <ul
+                class="variants"
+                aria-label={`Alternative termer på ${languageNames[language] ?? language}`}
+              >
+                {alternativeTerms(entry, language).map((variant) => (
+                  <li>
+                    <span>{variant.status}</span>
+                    {variant.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+      <div class="status-stamp" data-status={data.review.status}>
+        <span>
+          {data.review.status === "reviewed" ? "FAGLIG SJEKKET" : "FORELØPIG"}
+        </span>
+        <small>
+          {data.review.last_reviewed
+            ? data.review.last_reviewed.toLocaleDateString("nb-NO")
+            : "Trenger gjennomgang"}
+        </small>
+      </div>
+    </header>
+
+    <div class="concept__grid">
+      <div class="concept__main">
+        <section aria-labelledby="definition-heading">
+          <p class="section-number">01 / DEFINISJON</p>
+          <h2 id="definition-heading">Hva betyr det?</h2>
+          {data.definition.nb ? (
+            <p class="definition">{data.definition.nb}</p>
+          ) : (
+            <p class="missing">Definisjon mangler og er klar for bidrag.</p>
+          )}
+          {data.definition.en && (
+            <p class="definition definition--secondary" lang="en">
+              {data.definition.en}
+            </p>
+          )}
+        </section>
+
+        {Object.entries(data.notes).map(([language, notes]) => (
+          <section aria-labelledby={`notes-${language}`}>
+            <p class="section-number">
+              02 / MERKNAD · {language.toUpperCase()}
+            </p>
+            <h2 id={`notes-${language}`}>Bruk og avgrensning</h2>
+            {notes.map((note) => (
+              <p>{note}</p>
+            ))}
+          </section>
+        ))}
+
+        {relationGroups.some(([, ids]) => ids.length > 0) && (
+          <section aria-labelledby="relations-heading">
+            <p class="section-number">03 / SAMMENHENGER</p>
+            <h2 id="relations-heading">Relaterte begrep</h2>
+            <dl class="relation-list">
+              {relationGroups.map(
+                ([label, ids]) =>
+                  ids.length > 0 && (
+                    <div>
+                      <dt>{label}</dt>
+                      <dd>
+                        {ids.map((id) => {
+                          const related = entryById.get(id);
+                          return related ? (
+                            <a href={termHref(related)}>
+                              {preferredTerm(related, "en")} /{" "}
+                              {preferredTerm(related, "nb")}
+                            </a>
+                          ) : null;
+                        })}
+                      </dd>
+                    </div>
+                  ),
+              )}
+            </dl>
+          </section>
+        )}
+
+        {data.sources.length > 0 && (
+          <section aria-labelledby="sources-heading">
+            <p class="section-number">04 / KILDER</p>
+            <h2 id="sources-heading">Referanser</h2>
+            <ol class="source-list">
+              {data.sources.map((source) => (
+                <li>
+                  <a href={source.url}>{source.title}</a>
+                  {source.publisher && <span>{source.publisher}</span>}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+      </div>
+
+      <aside class="concept__aside">
+        <div>
+          <p class="aside-label">OMRÅDE</p>
+          <ul>
+            {data.domains.map((domain) => (
+              <li>{domain}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="aside-label">SPRÅK</p>
+          <p>
+            {languages.map((language) => language.toUpperCase()).join(" · ")}
+          </p>
+        </div>
+        <div>
+          <p class="aside-label">KONSEPT-ID</p>
+          <code>{data.id}</code>
+        </div>
+      </aside>
+    </div>
+
+    <section class="correction-callout">
+      <div>
+        <p class="section-number">SER NOE SOM ER FEIL?</p>
+        <h2>Gjør ordlisten bedre.</h2>
+        <p>Send en rettelse uten å kjenne datastrukturen.</p>
+      </div>
+      <a
+        class="button button--dark"
+        href={`https://github.com/mikaello/trancycle/issues/new?template=correction.yml&title=${correctionTitle}`}
+      >
+        Foreslå en rettelse <span>↗</span>
+      </a>
+    </section>
+  </article>
+</BaseLayout>
