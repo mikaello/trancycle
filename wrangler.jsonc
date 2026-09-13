@@ -2,6 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "trancycle",
   "compatibility_date": "2026-09-13",
+  // Keep production on the final custom domain while allowing pull-request previews.
+  "workers_dev": false,
   "preview_urls": true,
   "assets": {
     "directory": "./dist",
