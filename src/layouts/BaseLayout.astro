@@ -66,10 +66,14 @@ const {
         </a>
         <nav class="site-nav" aria-label="Hovedmeny">
           <a href={sitePath("/")}>Begrep</a>
-          <a href={sitePath("/explore/")}>Utforsk</a>
+          <a href={sitePath("/explore/")} data-mobile-nav>
+            Utforsk
+          </a>
           <a href={sitePath("/data/terms.json")}>JSON</a>
           <a href={sitePath("/data/terms.csv")}>CSV</a>
-          <a href="https://github.com/mikaello/trancycle">GitHub</a>
+          <a href="https://github.com/mikaello/trancycle" data-mobile-nav>
+            GitHub
+          </a>
         </nav>
         <div class="theme-switcher" aria-label="Fargetema">
           <button
@@ -97,6 +101,17 @@ const {
             ●
           </button>
         </div>
+        <button
+          class="theme-cycle"
+          type="button"
+          data-cycle-theme
+          aria-label="Bytt fargetema"
+          title="Bytt fargetema"
+        >
+          <span data-theme-icon aria-hidden="true">
+            A
+          </span>
+        </button>
       </div>
     </header>
     <main id="content">
@@ -119,12 +134,26 @@ const {
     <script>
       const themeButtons =
         document.querySelectorAll<HTMLButtonElement>("[data-set-theme]");
+      const themeCycle =
+        document.querySelector<HTMLButtonElement>("[data-cycle-theme]");
+      const themeIcon =
+        themeCycle?.querySelector<HTMLElement>("[data-theme-icon]");
+      const themeOrder = ["system", "light", "dark"] as const;
+      const themeDetails = {
+        system: { icon: "A", label: "systemtema" },
+        light: { icon: "☀", label: "lyst tema" },
+        dark: { icon: "●", label: "mørkt tema" },
+      } as const;
       let savedTheme = "system";
       try {
         savedTheme = localStorage.getItem("trancycle-theme") ?? "system";
       } catch {}
+      if (!themeOrder.includes(savedTheme as (typeof themeOrder)[number])) {
+        savedTheme = "system";
+      }
 
       const applyTheme = (theme: string) => {
+        savedTheme = theme;
         if (theme === "system") {
           delete document.documentElement.dataset.theme;
           try {
@@ -143,6 +172,16 @@ const {
             String(button.dataset.setTheme === theme),
           );
         });
+
+        const detail = themeDetails[theme as keyof typeof themeDetails];
+        if (themeCycle && themeIcon && detail) {
+          themeIcon.textContent = detail.icon;
+          themeCycle.setAttribute(
+            "aria-label",
+            `Fargetema: ${detail.label}. Trykk for å bytte.`,
+          );
+          themeCycle.title = `Fargetema: ${detail.label}`;
+        }
       };
 
       applyTheme(savedTheme);
@@ -151,6 +190,20 @@ const {
           applyTheme(button.dataset.setTheme!),
         ),
       );
+      themeCycle?.addEventListener("click", () => {
+        const current = themeOrder.includes(
+          savedTheme as (typeof themeOrder)[number],
+        )
+          ? savedTheme
+          : "system";
+        const next =
+          themeOrder[
+            (themeOrder.indexOf(current as (typeof themeOrder)[number]) + 1) %
+              themeOrder.length
+          ];
+        savedTheme = next;
+        applyTheme(next);
+      });
     </script>
   </body>
 </html>
