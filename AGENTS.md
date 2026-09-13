@@ -6,7 +6,7 @@ Trancycle is an open cycling terminology project that connects language-specific
 
 The initial public experience focuses on English and Norwegian Bokmål, while the data model must remain open to Nynorsk and other languages.
 
-Read `PUBLIC-RELEASE-RESEARCH.md` before making architectural or content-model changes.
+Read `docs/PUBLIC-RELEASE-RESEARCH.md` before making architectural or content-model changes.
 
 ## Core terminology model
 

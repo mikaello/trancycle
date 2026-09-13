@@ -6,7 +6,7 @@ The public site is a static Astro build with local search, light and dark themes
 
 Git concept files are the canonical data source, and Cloudflare Workers Static Assets is the intended production host.
 
-Read the [public release research](./PUBLIC-RELEASE-RESEARCH.md) for the architecture decision and [ROADMAP.md](./ROADMAP.md) for the next phases.
+Read the [public release research](./docs/PUBLIC-RELEASE-RESEARCH.md) for the architecture decision and [ROADMAP.md](./docs/ROADMAP.md) for the next phases.
 
 ## Local development
 
@@ -50,7 +50,7 @@ Review the staged files before moving them into `src/content/terms/` because com
 
 Airtable attachment URLs are deliberately excluded from the import.
 
-See [MIGRATION-REPORT.md](./MIGRATION-REPORT.md) for the migration decisions and remaining content work.
+See [MIGRATION-REPORT.md](./docs/MIGRATION-REPORT.md) for the migration decisions and remaining content work.
 
 ## Cloudflare deployment
 
@@ -78,7 +78,7 @@ You do not need to know Git or the internal data format to contribute.
 
 Pull requests are also welcome.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the contribution and review principles.
+See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for the contribution and review principles.
 
 ## License
 
