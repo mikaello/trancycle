@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { sitePath } from "../lib/terms";
 
 interface Props {
   title?: string;
@@ -30,7 +31,7 @@ const {
       content="#11130f"
       media="(prefers-color-scheme: dark)"
     />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={sitePath("/favicon.svg")} type="image/svg+xml" />
     <title>{title}</title>
     <script is:inline>
       (() => {
@@ -55,15 +56,19 @@ const {
     </a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="wordmark" href="/" aria-label="Trancycle, forsiden">
+        <a
+          class="wordmark"
+          href={sitePath("/")}
+          aria-label="Trancycle, forsiden"
+        >
           <span>TRAN</span>
           <span>CYCLE</span>
         </a>
         <nav class="site-nav" aria-label="Hovedmeny">
-          <a href="/">Begrep</a>
-          <a href="/explore/">Utforsk</a>
-          <a href="/data/terms.json">JSON</a>
-          <a href="/data/terms.csv">CSV</a>
+          <a href={sitePath("/")}>Begrep</a>
+          <a href={sitePath("/explore/")}>Utforsk</a>
+          <a href={sitePath("/data/terms.json")}>JSON</a>
+          <a href={sitePath("/data/terms.csv")}>CSV</a>
           <a href="https://github.com/mikaello/trancycle">GitHub</a>
         </nav>
         <div class="theme-switcher" aria-label="Fargetema">

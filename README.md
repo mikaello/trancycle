@@ -74,6 +74,23 @@ No Astro server adapter, database, runtime API, or visitor-facing secret is requ
 
 Cloudflare Pages remains compatible, but Cloudflare and Astro now recommend Workers for new projects.
 
+## GitHub Pages production mirror
+
+The `main` branch is also published to [GitHub Pages](https://mikaello.github.io/trancycle/).
+
+The GitHub Pages workflow runs only after pushes to `main` or from a manual workflow dispatch.
+
+Pull requests intentionally do not deploy to GitHub Pages, so pull-request review remains on Cloudflare Workers previews.
+
+Complete this one-time setup in the repository settings:
+
+1. Open **Settings → Pages**.
+2. Set **Build and deployment → Source** to **GitHub Actions**.
+3. Open **Settings → Environments → github-pages** after the first workflow run.
+4. Add a deployment branch rule for `main` if the Pages environment needs an explicit production guardrail.
+
+The workflow uses `/trancycle` as Astro's base path for the project-site URL, while Cloudflare builds continue to use the site root.
+
 ## Contributing
 
 You do not need to know Git or the internal data format to contribute.
