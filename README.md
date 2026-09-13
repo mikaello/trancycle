@@ -4,7 +4,7 @@ Trancycle is an open English–Norwegian glossary of cycling terms.
 
 The public site is a static Astro build with local search, light and dark themes, permanent concept pages, and JSON and CSV exports.
 
-Git concept files are the canonical data source, and Cloudflare Pages is the intended production host.
+Git concept files are the canonical data source, and Cloudflare Workers Static Assets is the intended production host.
 
 Read the [public release research](./PUBLIC-RELEASE-RESEARCH.md) for the architecture decision and [ROADMAP.md](./ROADMAP.md) for the next phases.
 
@@ -46,13 +46,17 @@ Review the staged files before moving them into `src/content/terms/` because com
 
 Airtable attachment URLs are deliberately excluded from the import.
 
-## Cloudflare Pages
+## Cloudflare deployment
 
-Connect the GitHub repository to a Cloudflare Pages project and use the Astro preset.
+Connect the GitHub repository to a new Cloudflare Worker through Workers Builds.
 
-Set the build command to `npm run build` and the output directory to `dist`.
+Set the build command to `npm run build` and the deploy command to `npm run deploy`.
 
-No server adapter, database, runtime API, or visitor-facing secret is required.
+The checked-in Wrangler configuration publishes the generated `dist` directory as static assets and serves the custom 404 page.
+
+No Astro server adapter, database, runtime API, or visitor-facing secret is required.
+
+Cloudflare Pages remains compatible, but Cloudflare and Astro now recommend Workers for new projects.
 
 ## Contributing
 

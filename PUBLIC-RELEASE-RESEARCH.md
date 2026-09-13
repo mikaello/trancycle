@@ -6,7 +6,9 @@ Trancycle should launch as a static, bilingual cycling glossary whose canonical 
 
 Astro is the best fit of the four candidate generators because it combines static HTML by default, schema-validated content collections, a built-in image pipeline, and an escape hatch for the small amount of JavaScript needed for search and theme selection.^5 ^6 ^7
 
-Cloudflare Pages is the preferred production host because the project is fully static and benefits from Cloudflare's global asset distribution, compression, cache controls, custom headers, and branch previews.
+Cloudflare Workers Static Assets is the preferred production host because the project is fully static and benefits from Cloudflare's global asset distribution, compression, cache controls, custom headers, and preview deployments.
+
+Cloudflare Pages remains compatible, but Cloudflare and Astro now recommend Workers for new projects.
 
 GitHub Pages remains a capable fallback, but GitHub should primarily hold the canonical source and contribution workflow.
 
