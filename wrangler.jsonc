@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "trancycle",
   "compatibility_date": "2026-09-13",
+  "preview_urls": true,
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
