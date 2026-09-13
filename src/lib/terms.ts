@@ -2,6 +2,11 @@ import type { CollectionEntry } from "astro:content";
 
 export type TermEntry = CollectionEntry<"terms">;
 
+export function sitePath(path: string): string {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${path.replace(/^\/+/, "")}`;
+}
+
 export const languageNames: Record<string, string> = {
   en: "English",
   nb: "Norsk bokmål",
@@ -36,7 +41,7 @@ export function byPreferredTerm(language: string) {
 }
 
 export function termHref(entry: TermEntry): string {
-  return `/term/${entry.data.slug}/`;
+  return sitePath(`/term/${entry.data.slug}/`);
 }
 
 export function allSearchText(entry: TermEntry): string {
