@@ -1,0 +1,211 @@
+---
+interface Props {
+  view: string;
+}
+const { view } = Astro.props;
+const gear = (x: number, y: number, radius: number, teeth: number) =>
+  Array.from({ length: teeth * 4 }, (_, i) => {
+    const a = (i * Math.PI * 2) / (teeth * 4);
+    const r = i % 4 < 2 ? radius : radius - 6;
+    return `${i ? "L" : "M"}${x + Math.cos(a) * r} ${y + Math.sin(a) * r}`;
+  }).join(" ") + "Z";
+---
+
+<g
+  fill="none"
+  stroke="currentColor"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  {view === "drivetrain" && (
+    <>
+      {[94, 78, 62, 46].map((r) => (
+        <path
+          d={gear(280, 280, r, 24)}
+          stroke-width="2"
+          fill="var(--surface)"
+        />
+      ))}
+      <circle cx="280" cy="280" r="14" stroke-width="5" />
+      <path
+        d="M292 304L342 337L378 323L398 362L356 400L320 410"
+        stroke-width="18"
+      />
+      <path d="M351 348L377 373" stroke="var(--bg)" stroke-width="5" />
+      <path d="M369 324L378 302" stroke-width="12" />
+      <path d="M378 302Q406 278 398 230" stroke-width="3" />
+      <path d="M320 410L260 540" stroke-width="22" class="art-frame" />
+      {[
+        [320, 410],
+        [260, 540],
+      ].map(([x, y]) => (
+        <>
+          <path d={gear(x, y, 31, 12)} fill="var(--bg)" stroke-width="4" />
+          <circle cx={x} cy={y} r="10" stroke-width="4" />
+        </>
+      ))}
+      <path d={gear(690, 345, 125, 40)} fill="var(--bg)" stroke-width="4" />
+      <circle cx="690" cy="345" r="94" stroke-width="3" />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <path
+          d="M690 345L780 345"
+          transform={`rotate(${i * 72} 690 345)`}
+          stroke-width="15"
+        />
+      ))}
+      <path
+        d="M280 184L690 220A125 125 0 0 1 711 468L265 571A31 31 0 0 1 232 523L347 424A31 31 0 0 0 320 379L251 369A94 94 0 0 1 280 184"
+        stroke-width="9"
+      />
+      <path
+        d="M280 184L690 220A125 125 0 0 1 711 468L265 571A31 31 0 0 1 232 523L347 424A31 31 0 0 0 320 379L251 369A94 94 0 0 1 280 184"
+        stroke="var(--bg)"
+        stroke-width="3"
+        stroke-dasharray="2 7"
+      />
+      <path d="M690 345L762 481" stroke-width="24" />
+      <circle cx="690" cy="345" r="14" stroke="var(--bg)" stroke-width="4" />
+      <circle cx="762" cy="481" r="7" stroke="var(--bg)" stroke-width="3" />
+    </>
+  )}
+  {view === "headset" && (
+    <>
+      <path d="M460 50V670" class="art-guide" stroke-dasharray="7 9" />
+      <ellipse
+        cx="460"
+        cy="90"
+        rx="55"
+        ry="15"
+        fill="var(--surface)"
+        stroke-width="4"
+      />
+      <path d="M455 70H465V100H455Z" fill="currentColor" />
+      <path
+        d="M425 156L462 144L610 170V206L462 191L425 180Z"
+        fill="var(--surface)"
+        stroke-width="4"
+      />
+      <ellipse cx="457" cy="158" rx="25" ry="10" stroke-width="3" />
+      <ellipse
+        cx="610"
+        cy="188"
+        rx="15"
+        ry="22"
+        stroke-width="4"
+        fill="var(--bg)"
+      />
+      {[245, 273].map((y) => (
+        <>
+          <path
+            d={`M414 ${y}v12a46 13 0 0 0 92 0v-12`}
+            fill="var(--surface)"
+            stroke-width="3"
+          />
+          <ellipse
+            cx="460"
+            cy={y}
+            rx="46"
+            ry="13"
+            fill="var(--bg)"
+            stroke-width="3"
+          />
+          <ellipse cx="460" cy={y} rx="28" ry="7" stroke-width="2" />
+        </>
+      ))}
+      {[337, 536].map((y) => (
+        <>
+          <ellipse
+            cx="460"
+            cy={y}
+            rx="60"
+            ry="18"
+            fill="var(--surface)"
+            stroke-width="4"
+          />
+          <ellipse cx="460" cy={y} rx="33" ry="9" stroke-width="3" />
+          <path d={`M403 ${y + 6}q57 38 114 0`} stroke-width="5" />
+        </>
+      ))}
+      <path
+        d="M409 391L336 403M409 463L332 509"
+        stroke-width="19"
+        class="art-frame"
+      />
+      <path
+        d="M408 384V488Q460 517 512 488V384"
+        fill="var(--surface)"
+        stroke-width="4"
+      />
+      <ellipse
+        cx="460"
+        cy="384"
+        rx="52"
+        ry="16"
+        stroke-width="4"
+        fill="var(--bg)"
+      />
+      <ellipse cx="460" cy="586" rx="49" ry="13" stroke-width="5" />
+      <path
+        d="M439 644V609Q460 596 481 609V644M409 678V655Q460 627 511 655V678"
+        fill="var(--surface)"
+        stroke-width="4"
+      />
+      <ellipse
+        cx="460"
+        cy="609"
+        rx="21"
+        ry="7"
+        stroke-width="3"
+        fill="var(--bg)"
+      />
+      <path d="M719 254V377M801 254V377" stroke-width="5" />
+      <ellipse cx="760" cy="254" rx="41" ry="12" stroke-width="3" />
+      <path
+        d="M724 293L746 307L760 294L774 307L796 293M724 319L746 333L760 320L774 333L796 319"
+        stroke-width="5"
+      />
+      <path d="M754 298H766V335H754Z" fill="var(--surface)" stroke-width="3" />
+      <path d="M690 245H680V386H690" class="art-guide" />
+    </>
+  )}
+  {view === "wheel" && (
+    <>
+      <circle cx="500" cy="360" r="272" stroke-width="23" />
+      <circle cx="500" cy="360" r="250" stroke-width="7" />
+      {Array.from({ length: 28 }, (_, i) => {
+        const a = (i * Math.PI) / 14;
+        return (
+          <path
+            d={`M${500 + 30 * Math.cos(a + 1.2)} ${360 + 30 * Math.sin(a + 1.2)}L${500 + 247 * Math.cos(a)} ${360 + 247 * Math.sin(a)}`}
+            stroke-width="2"
+            opacity=".6"
+          />
+        );
+      })}
+      <circle
+        cx="500"
+        cy="360"
+        r="98"
+        stroke-width="10"
+        stroke-dasharray="18 7"
+      />
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <path
+          d="M524 360L554 346L590 360"
+          transform={`rotate(${i * 60} 500 360)`}
+          stroke-width="6"
+        />
+      ))}
+      <circle cx="500" cy="360" r="30" fill="var(--bg)" stroke-width="5" />
+      <circle cx="500" cy="360" r="10" stroke-width="5" />
+      <path
+        d="M545 231L588 256L574 298L532 274Z"
+        fill="var(--surface)"
+        stroke-width="5"
+      />
+      <path d="M561 240Q608 180 580 127" stroke-width="4" />
+      <path d="M494 607V576H506V607Z" fill="var(--bg)" stroke-width="3" />
+      <path d="M493 576H507" stroke-width="6" />
+    </>
+  )}
+</g>

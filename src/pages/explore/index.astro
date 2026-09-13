@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Explorer from "../../components/diagrams/Explorer.astro";
+import { diagrams } from "../../data/diagrams";
+---
+
+<BaseLayout
+  title="Utforsk sykkelen — Trancycle"
+  description="Finn sykkeldeler i interaktive tegninger og se navnene på norsk og engelsk."
+>
+  <Explorer diagram={diagrams[0]!} />
+</BaseLayout>

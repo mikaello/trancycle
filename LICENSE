@@ -10,6 +10,15 @@ Reuse must credit "Trancycle contributors", link to https://github.com/mikaello/
 
 Third-party media and quoted material are not covered by this grant and retain their recorded licenses.
 
+## Original diagrams
+
+The original SVG artwork in `src/components/diagrams/BicycleArt.astro` and `src/components/diagrams/DetailArt.astro`, and the original annotation text in `src/data/diagrams.ts`, are licensed under CC BY 4.0 with the same attribution requirements as the dictionary content.
+The creator is Trancycle contributors, and the original source is https://github.com/mikaello/trancycle/tree/main/src/components/diagrams.
+The drawings were made with AI-assisted SVG code and are not marked as expert-reviewed.
+Per-view descriptions and technical reference URLs are recorded in `src/data/diagrams.ts` and rendered beside each diagram.
+Reference illustrations were not copied or traced.
+The surrounding templates, styles, and interaction code remain software under the MIT License.
+
 ## Software
 
 The software in this repository is licensed under the MIT License.

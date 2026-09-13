@@ -10,25 +10,20 @@ The remaining launch work is to normalize ambiguous translations, add original d
 
 ## Phase 2: interactive bicycle map
 
-An interactive bicycle diagram should be the signature next feature, but it should begin as a content and interaction design project rather than a decorative illustration.
+The first implementation is available at `/explore/`, with an overview and separate frame, drivetrain, headset, and wheel/brake views.
 
-The diagram should help someone move from a visible bicycle part to the correct concept, translation, definition, and related components.
+Read [BICYCLE-DIAGRAM-RESEARCH.md](./BICYCLE-DIAGRAM-RESEARCH.md) for the research, design choices, and validation results.
 
-The first version should use an original or rights-cleared inline SVG with stable elements keyed to concept IDs.
+The original inline SVG artwork uses stable concept IDs and the canonical glossary labels.
+Static annotation links and text remain available without JavaScript, with progressive selection, 44-pixel markers, visible keyboard focus, and direct concept links.
 
-It should work as useful static artwork before JavaScript loads and progressively add pointer, touch, and keyboard interactions.
+The implementation uses no canvas renderer, visualization framework, web fonts, or runtime data fetching.
+Generated link checks and the original 150 kB compressed SVG / 10 kB compressed interaction-script budgets run in CI.
 
-Every hotspot must have an accessible text equivalent, a large touch target, a visible focus state, and a direct link to its concept page.
+Before calling the diagrams reviewed, arrange an editorial anatomy review and test identification tasks with real mobile and desktop users who arrive with an English word, a Norwegian word, or no word at all.
+The current implementation has engineering validation, not a completed user study or expert sign-off.
 
-The feature should avoid a canvas renderer, a general visualization framework, web fonts, and runtime data fetching.
-
-The initial performance budget should keep the optimized SVG below 150 kB compressed and its interaction script below 10 kB compressed.
-
-The first map should cover a carefully reviewed set of roughly 30 visually identifiable parts on one conventional bicycle.
-
-Geometry, drivetrain, wheel anatomy, suspension, and bicycle-type variants can follow as separate focused layers instead of overcrowding one drawing.
-
-Before implementation, test a desktop labeled view and a mobile tap-to-inspect view with real users who arrive with either an English word, a Norwegian word, or no word at all.
+Consider geometry, suspension, wheel internals, and bicycle-type variants after that feedback, as separate focused views instead of extra labels on the overview.
 
 Success means that the diagram makes an unknown part easier to identify without delaying the glossary's first render or making search harder to reach.
 

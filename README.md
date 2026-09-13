@@ -24,6 +24,7 @@ npm run format:check
 npm run check
 npm test
 npm run build
+npm run test:site
 ```
 
 ## Content
@@ -33,6 +34,13 @@ Each file in `src/content/terms/` represents one cycling concept and contains it
 The schema is validated during `npm run check` and the production build.
 
 Machine-readable exports are generated at `/data/terms.json` and `/data/terms.csv`.
+
+## Bicycle diagrams
+
+The visual glossary at `/explore/` includes an overview and focused frame, drivetrain, headset, and wheel/brake diagrams.
+Each view works as static HTML and adds selection with a small local script.
+Annotations resolve stable IDs against the canonical concepts, and concept pages link back to their diagrams.
+See the [diagram research and design decision](./docs/BICYCLE-DIAGRAM-RESEARCH.md) for references, alternatives, scope, and the validation checklist.
 
 ## Airtable migration
 

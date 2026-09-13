@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Explorer from "../../components/diagrams/Explorer.astro";
+import { diagrams, type Diagram } from "../../data/diagrams";
+export function getStaticPaths() {
+  return diagrams
+    .slice(1)
+    .map((diagram) => ({ params: { view: diagram.id }, props: { diagram } }));
+}
+interface Props {
+  diagram: Diagram;
+}
+const { diagram } = Astro.props;
+---
+
+<BaseLayout
+  title={`${diagram.title} — Utforsk sykkelen — Trancycle`}
+  description={diagram.description}
+>
+  <Explorer diagram={diagram} />
+</BaseLayout>

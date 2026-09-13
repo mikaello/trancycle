@@ -1,0 +1,234 @@
+---
+import { getCollection } from "astro:content";
+import {
+  diagrams,
+  diagramHref,
+  diagramsForConcept,
+  type Diagram,
+} from "../../data/diagrams";
+import {
+  preferredTerm,
+  alternativeTerms,
+  termHref,
+  languageNames,
+  type TermEntry,
+} from "../../lib/terms";
+import BicycleArt from "./BicycleArt.astro";
+import DetailArt from "./DetailArt.astro";
+import "../../styles/explorer.css";
+interface Props {
+  diagram: Diagram;
+}
+const { diagram } = Astro.props;
+const entries = new Map(
+  (await getCollection("terms")).map((entry) => [entry.data.id, entry]),
+);
+const parts = diagram.parts.map((part, index) => {
+  const entry = entries.get(part.conceptId);
+  if (!entry)
+    throw new Error(`Diagram ${diagram.id}: missing concept ${part.conceptId}`);
+  return { ...part, entry, number: String(index + 1).padStart(2, "0") };
+});
+const name = (entry: TermEntry) =>
+  `${preferredTerm(entry, "nb")} / ${preferredTerm(entry, "en")}`;
+---
+
+<section class="explorer shell" data-explorer>
+  <header class="explorer-heading">
+    <div>
+      <p class="section-number">VISUELL ORDLISTE / EN + NB</p>
+      <h1>Hva heter delen?</h1>
+    </div>
+    <p>
+      Finn den på sykkelen.
+      <br />
+      Se navnet på begge språk.
+    </p>
+  </header>
+  <nav class="diagram-nav" aria-label="Sykkeltegninger">
+    {diagrams.map((view, i) => (
+      <a
+        href={diagramHref(view.id)}
+        aria-current={view.id === diagram.id ? "page" : undefined}
+      >
+        <span aria-hidden="true">0{i + 1}</span>
+        {view.title}
+      </a>
+    ))}
+  </nav>
+  <div class="diagram-intro">
+    <div>
+      <p class="section-number">{diagram.subtitle}</p>
+      <h2>{diagram.title}</h2>
+    </div>
+    <p>{diagram.description}</p>
+  </div>
+  <div class="explorer-grid">
+    <div class="explorer-visual">
+      <figure class="diagram-figure">
+        <div class="diagram-stage">
+          <svg
+            class="diagram-art"
+            viewBox="0 0 1000 720"
+            role="img"
+            aria-labelledby="drawing-title drawing-desc"
+          >
+            <title id="drawing-title">{diagram.title}</title>
+            <desc id="drawing-desc">{diagram.alt}</desc>
+            {diagram.id === "bicycle" || diagram.id === "frame" ? (
+              <BicycleArt frameOnly={diagram.id === "frame"} />
+            ) : (
+              <DetailArt view={diagram.id} />
+            )}
+            <g class="diagram-leaders" fill="none" aria-hidden="true">
+              {parts.map((part) => (
+                <g data-leader={part.conceptId}>
+                  <path
+                    d={`M${part.marker.join(" ")}H${part.marker[0] < 500 ? 150 : 850}L${part.point.join(" ")}`}
+                  />
+                  <circle cx={part.point[0]} cy={part.point[1]} r="5" />
+                  <circle
+                    class="selection-ring"
+                    cx={part.point[0]}
+                    cy={part.point[1]}
+                    r="22"
+                  />
+                </g>
+              ))}
+            </g>
+          </svg>
+          {parts.map((part) => (
+            <a
+              class="diagram-marker"
+              style={`--x:${part.marker[0] / 10}%;--y:${part.marker[1] / 7.2}%`}
+              href={`#part-${part.conceptId}`}
+              data-select-part={part.conceptId}
+              aria-label={`${part.number}: ${name(part.entry)}`}
+              title={name(part.entry)}
+            >
+              {part.number}
+            </a>
+          ))}
+        </div>
+        <figcaption>
+          Velg et nummer i tegningen eller en del i listen.
+        </figcaption>
+      </figure>
+      <p
+        class="sr-only"
+        role="status"
+        aria-live="polite"
+        data-selection-status
+      ></p>
+      <div class="part-details" aria-label="Om delene">
+        {parts.map((part) => (
+          <article
+            id={`part-${part.conceptId}`}
+            class="part-detail"
+            data-detail={part.conceptId}
+            tabindex="-1"
+          >
+            <div class="part-detail__top">
+              <span class="section-number">{part.number} / I TEGNINGEN</span>
+              <span class="editorial-state">
+                {part.entry.data.review.status === "reviewed"
+                  ? "Faglig sjekket"
+                  : "Foreløpig begrep"}
+              </span>
+            </div>
+            <h3>
+              {preferredTerm(part.entry, "nb")}{" "}
+              <span lang="en">{preferredTerm(part.entry, "en")}</span>
+            </h3>
+            <p>{part.hint}</p>
+            {part.entry.data.definition.nb && (
+              <p>{part.entry.data.definition.nb}</p>
+            )}
+            {Object.keys(part.entry.data.terms)
+              .filter(
+                (language) => alternativeTerms(part.entry, language).length > 0,
+              )
+              .map((language) => (
+                <p class="part-alternatives">
+                  <span>{languageNames[language] ?? language}:</span>{" "}
+                  <span lang={language}>
+                    {alternativeTerms(part.entry, language)
+                      .map((v) => v.text)
+                      .join(" · ")}
+                  </span>
+                </p>
+              ))}
+            <div class="part-detail__links">
+              <a class="button" href={termHref(part.entry)}>
+                Åpne begrepet <span aria-hidden="true">↗</span>
+              </a>
+              {diagramsForConcept(part.conceptId)
+                .filter((view) => view.id !== diagram.id)
+                .map((view) => (
+                  <a href={`${diagramHref(view.id)}#part-${part.conceptId}`}>
+                    Se i {view.title.toLocaleLowerCase("nb")} →
+                  </a>
+                ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+    <aside class="diagram-key" aria-labelledby="key-heading">
+      <div class="diagram-key__heading">
+        <h2 id="key-heading">Deler i tegningen</h2>
+        <span>{parts.length}</span>
+      </div>
+      <ol>
+        {parts.map((part) => (
+          <li>
+            <a
+              href={`#part-${part.conceptId}`}
+              data-select-part={part.conceptId}
+              class="part-key-link"
+            >
+              <span class="part-key-number" aria-hidden="true">
+                {part.number}
+              </span>
+              <span>
+                <strong>{preferredTerm(part.entry, "nb")}</strong>
+                <span lang="en">{preferredTerm(part.entry, "en")}</span>
+              </span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+      <a class="explorer-search-link" href="/">
+        Søk i hele ordlisten →
+      </a>
+    </aside>
+  </div>
+  <footer class="diagram-notes">
+    <p>
+      Tegningene viser utvalgte konstruksjoner. Deler og løsninger varierer
+      mellom sykler. Begrepene beholder ordlistens redaksjonelle status.
+    </p>
+    <details>
+      <summary>Om tegningen og kildene</summary>
+      <p>
+        Original begrepsskisse laget for Trancycle med KI-assistert SVG-kode.
+        Faglig gjennomgang gjenstår.
+      </p>
+      <p>
+        Referanse for plassering og funksjon:{" "}
+        <a href={diagram.source.url}>{diagram.source.title}</a>. Illustrasjoner
+        fra referansene er ikke kopiert.
+      </p>
+      <p>
+        Illustrasjon: Trancycle contributors ·{" "}
+        <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> ·{" "}
+        <a href="https://github.com/mikaello/trancycle/tree/main/src/components/diagrams">
+          Originalkilde
+        </a>
+        .
+      </p>
+    </details>
+  </footer>
+</section>
+<script src="../../scripts/explorer.ts"></script>

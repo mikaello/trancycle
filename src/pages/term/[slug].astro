@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { diagramsForConcept, diagramHref } from "../../data/diagrams";
 import {
   alternativeTerms,
   languageNames,
@@ -102,6 +103,16 @@ const structuredData = {
         </small>
       </div>
     </header>
+
+    {diagramsForConcept(data.id).length > 0 && (
+      <nav class="concept-diagrams" aria-label="Finn delen i en tegning">
+        {diagramsForConcept(data.id).map((diagram) => (
+          <a href={`${diagramHref(diagram.id)}#part-${data.id}`}>
+            Se i tegningen: {diagram.title} →
+          </a>
+        ))}
+      </nav>
+    )}
 
     <div class="concept__grid">
       <div class="concept__main">

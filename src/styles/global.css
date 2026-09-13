@@ -929,3 +929,39 @@ select {
     transition-duration: 0.01ms !important;
   }
 }
+
+.concept-diagrams {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  padding-top: 24px;
+}
+.concept-diagrams a {
+  display: inline-block;
+  padding-block: 12px;
+}
+
+.explore-entry {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-top: 16px;
+  padding: 18px 24px;
+  border: 1px solid var(--line);
+  text-decoration: none;
+}
+.explore-entry strong {
+  display: block;
+  font-size: 1rem;
+}
+.explore-entry small {
+  color: var(--muted);
+}
+.explore-entry > span:last-child {
+  font-size: 1.5rem;
+}
+.explore-entry:hover {
+  border-color: var(--ink);
+  background: var(--surface);
+}

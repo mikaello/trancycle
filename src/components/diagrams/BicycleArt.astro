@@ -1,0 +1,96 @@
+---
+interface Props {
+  frameOnly?: boolean;
+}
+const { frameOnly = false } = Astro.props;
+const wheels = [260, 750];
+---
+
+<g
+  class="bicycle-art"
+  fill="none"
+  stroke="currentColor"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  {!frameOnly && (
+    <>
+      <path d="M120 632H895" class="art-guide" />
+      {wheels.map((x) => (
+        <g>
+          <circle cx={x} cy="465" r="163" stroke-width="15" />
+          <circle cx={x} cy="465" r="146" stroke-width="3" />
+          {Array.from({ length: 24 }, (_, i) => {
+            const a = (i * Math.PI) / 12;
+            return (
+              <path
+                d={`M${x + 10 * Math.cos(a + 1)} ${465 + 10 * Math.sin(a + 1)} L${x + 144 * Math.cos(a)} ${465 + 144 * Math.sin(a)}`}
+                stroke-width="1.4"
+                opacity=".48"
+              />
+            );
+          })}
+          <circle cx={x} cy="465" r="12" fill="var(--bg)" stroke-width="4" />
+        </g>
+      ))}
+      <path d="M396 280L361 184M666 224L649 164L704 157" stroke-width="12" />
+      <path
+        d="M325 164Q345 157 375 163L416 170Q426 181 405 183L346 180Q323 178 325 164Z"
+        fill="currentColor"
+      />
+      <path d="M685 167L725 180L750 175" stroke-width="10" />
+      <path d="M718 181L732 198L756 200" stroke-width="4" />
+      <path d="M723 196Q770 230 700 306" stroke-width="2" />
+      <path d="M693 300Q703 380 750 465" stroke-width="15" />
+      <path d="M680 302Q680 382 742 460" stroke-width="5" />
+      <circle
+        cx="750"
+        cy="465"
+        r="46"
+        stroke-width="5"
+        stroke-dasharray="12 5"
+      />
+      <path d="M722 407L707 429L719 436L735 413Z" fill="currentColor" />
+    </>
+  )}
+  {frameOnly ? (
+    <>
+      <path
+        d="M170 510L350 230L445 530ZM350 230L700 207L730 298L445 530"
+        stroke-width="13"
+        class="art-frame"
+      />
+      <path
+        d="M350 230L339 198M700 207L695 190M730 298L736 315"
+        stroke-width="20"
+      />
+      <path d="M170 510L163 527" stroke-width="22" />
+      <path d="M170 515L167 529" stroke="var(--bg)" stroke-width="8" />
+      <circle cx="445" cy="530" r="30" stroke-width="12" fill="var(--bg)" />
+    </>
+  ) : (
+    <>
+      <path
+        d="M260 465L396 280L461 481ZM396 280L666 224L693 300L461 481"
+        stroke-width="12"
+        class="art-frame"
+      />
+      <path d="M666 224L693 300" stroke-width="20" />
+      <path d="M390 268L404 264" stroke-width="8" />
+      <circle cx="461" cy="481" r="43" fill="var(--bg)" stroke-width="6" />
+      <circle cx="461" cy="481" r="31" stroke-width="3" />
+      <circle cx="260" cy="465" r="29" fill="var(--bg)" stroke-width="4" />
+      <circle cx="260" cy="465" r="20" stroke-width="3" />
+      <path
+        d="M260 435L461 438A43 43 0 0 1 461 524L296 543L278 512L247 480A29 29 0 0 1 260 435Z"
+        stroke-width="4"
+      />
+      <path d="M271 481L294 501L296 543" stroke-width="8" />
+      <circle cx="278" cy="512" r="9" fill="var(--bg)" stroke-width="3" />
+      <circle cx="296" cy="543" r="9" fill="var(--bg)" stroke-width="3" />
+      <path d="M461 481L532 539" stroke-width="12" />
+      <circle cx="461" cy="481" r="8" fill="var(--bg)" stroke-width="3" />
+      <path d="M512 535H557V546H512Z" fill="var(--bg)" stroke-width="4" />
+    </>
+  )}
+</g>

@@ -15,7 +15,8 @@
     "preview": "astro preview",
     "test": "node --test",
     "import:airtable": "node scripts/import-airtable.mjs",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test:site": "node scripts/validate-site.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
