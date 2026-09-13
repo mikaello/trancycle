@@ -9,7 +9,7 @@ interface Props {
 
 const {
   title = "Trancycle — engelsk–norsk sykkelordbok",
-  description = "En rask, åpen og community-drevet ordliste for engelske og norske sykkelbegrep.",
+  description = "En åpen engelsk–norsk ordliste for sykkelbegrep.",
   structuredData,
 } = Astro.props as Props;
 ---
@@ -98,12 +98,17 @@ const {
     </main>
     <footer class="site-footer">
       <div>
-        <p>Trancycle er en åpen, community-drevet sykkelordbok.</p>
-        <p>Engelsk · Norsk bokmål · Flere språk senere</p>
+        <p>Trancycle er en åpen sykkelordbok.</p>
+        <p>Engelsk · Norsk bokmål</p>
       </div>
-      <a href="https://github.com/mikaello/trancycle/issues/new?template=new-term.yml">
-        Foreslå et begrep ↗
-      </a>
+      <div class="site-footer__links">
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          Innhold: CC BY 4.0
+        </a>
+        <a href="https://github.com/mikaello/trancycle/issues/new?template=new-term.yml">
+          Foreslå et begrep ↗
+        </a>
+      </div>
     </footer>
     <script>
       const themeButtons =

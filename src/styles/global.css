@@ -176,8 +176,8 @@ select {
   grid-template-columns: 1fr 8fr 3fr;
   gap: 24px;
   align-items: end;
-  min-height: 390px;
-  padding-block: 76px 62px;
+  min-height: 250px;
+  padding-block: 54px 46px;
 }
 
 .eyebrow {
@@ -503,6 +503,11 @@ select {
 
 .site-footer p {
   margin: 0 0 4px;
+}
+
+.site-footer__links {
+  display: flex;
+  gap: 24px;
 }
 
 .breadcrumb {
@@ -861,6 +866,11 @@ select {
   .site-footer {
     display: grid;
     gap: 24px;
+  }
+
+  .site-footer__links {
+    display: grid;
+    gap: 12px;
   }
 
   .concept__header {
