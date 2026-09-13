@@ -511,11 +511,9 @@ Do not publish the current Airtable attachment URLs because they expire and are 
 
 ## Licensing and public reuse
 
-The repository currently declares no license.
+The repository uses the MIT License for software and CC BY 4.0 for original glossary content and generated data exports.
 
-Before release, choose licenses separately for code, original terminology content, and third-party media.
-
-A practical default is MIT for code and CC BY 4.0 for original glossary content and database rights.
+Third-party media retains its recorded license and is not covered by the general content grant.
 
 CC BY 4.0 permits sharing and adaptation, including commercial reuse, when attribution is provided, and version 4.0 addresses sui generis database rights.^26
 

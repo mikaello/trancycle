@@ -36,7 +36,11 @@ Machine-readable exports are generated at `/data/terms.json` and `/data/terms.cs
 
 ## Airtable migration
 
-The import command reads the credential only from the `AIRTABLE_TOKEN` environment variable and writes to the ignored `migration/airtable-import/` staging directory by default.
+The 147 Airtable records were migrated on 13 September 2026.
+
+Git concept files are now canonical, and every migrated entry remains provisional until its terminology and meaning have been reviewed.
+
+The retained import command reads the credential only from the `AIRTABLE_TOKEN` environment variable and writes to the ignored `migration/airtable-import/` staging directory by default.
 
 ```sh
 AIRTABLE_TOKEN=... npm run import:airtable
@@ -45,6 +49,8 @@ AIRTABLE_TOKEN=... npm run import:airtable
 Review the staged files before moving them into `src/content/terms/` because comma-separated alternatives, duplicate labels, taxonomy, and relations need editorial judgment.
 
 Airtable attachment URLs are deliberately excluded from the import.
+
+See [MIGRATION-REPORT.md](./MIGRATION-REPORT.md) for the migration decisions and remaining content work.
 
 ## Cloudflare deployment
 
@@ -71,3 +77,11 @@ You do not need to know Git or the internal data format to contribute.
 Pull requests are also welcome.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the contribution and review principles.
+
+## License
+
+The original dictionary content and generated data exports are available under CC BY 4.0 and require attribution.
+
+The site code is available under the MIT License.
+
+See [LICENSE](./LICENSE) for attribution and scope details.

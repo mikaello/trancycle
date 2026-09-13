@@ -15,6 +15,8 @@ export async function GET() {
       "norwegian_bokmal",
       "domains",
       "editorial_status",
+      "license",
+      "attribution",
     ],
     ...entries.map((entry) => [
       entry.data.id,
@@ -23,11 +25,16 @@ export async function GET() {
       preferredTerm(entry, "nb"),
       entry.data.domains.join(" | "),
       entry.data.review.status,
+      "https://creativecommons.org/licenses/by/4.0/",
+      "Trancycle contributors — https://github.com/mikaello/trancycle",
     ]),
   ];
   const csv = `${rows.map((row) => row.map(quote).join(",")).join("\n")}\n`;
 
   return new Response(csv, {
-    headers: { "Content-Type": "text/csv; charset=utf-8" },
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      Link: '<https://creativecommons.org/licenses/by/4.0/>; rel="license"',
+    },
   });
 }
