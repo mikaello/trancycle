@@ -1,0 +1,63 @@
+name: Suggest a translation
+description: Add or correct a language label for an existing cycling concept.
+title: "translation: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Trancycle multilingual.
+        A translation belongs to an existing concept when it expresses the same cycling meaning.
+  - type: input
+    id: concept
+    attributes:
+      label: Existing concept or term
+      description: Link the Trancycle page or enter an existing English or Norwegian term.
+      placeholder: headset / styrelager
+    validations:
+      required: true
+  - type: input
+    id: language
+    attributes:
+      label: Translation language
+      description: Enter the language, language code if known, and any regional variety.
+      placeholder: Norwegian Nynorsk (nn)
+    validations:
+      required: true
+  - type: input
+    id: translation
+    attributes:
+      label: Translation
+      description: Enter the proposed preferred term.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and usage
+      description: Add spelling variants, admitted or colloquial alternatives, region, and context.
+  - type: textarea
+    id: meaning
+    attributes:
+      label: Meaning check
+      description: Briefly explain why this translation expresses the same cycling concept.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Link to reliable language or cycling sources that support this translation.
+      placeholder: One source URL per line, with a short note about what it supports.
+  - type: dropdown
+    id: familiarity
+    attributes:
+      label: Your familiarity with this language
+      options:
+        - Native speaker
+        - Fluent speaker
+        - Professional translator or terminologist
+        - Cycling-domain specialist
+        - Learner or researcher
+        - Prefer not to say
+    validations:
+      required: true

@@ -1,0 +1,58 @@
+name: Report a correction
+description: Correct an existing term, meaning, source, relation, or image.
+title: "correction: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Trancycle more accurate.
+        Plain-language explanations are welcome.
+  - type: input
+    id: concept
+    attributes:
+      label: Existing concept or term
+      description: Link the Trancycle page or enter the term that needs correction.
+      placeholder: headset / styrelager
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: What needs correction?
+      options:
+        - Preferred term or alternative
+        - Meaning or definition
+        - Language or usage note
+        - Category or related concept
+        - Source or reference
+        - Image or attribution
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong?
+      description: Explain the problem and the cycling context in which it appears.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Suggested correction
+      description: Describe the wording or data you think should replace it.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Link to reliable language or cycling sources that support the correction.
+      placeholder: One source URL per line, with a short note about what it supports.
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: Rights check
+      options:
+        - label: I have not pasted copyrighted descriptions or attached images without permission.
+          required: true
