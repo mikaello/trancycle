@@ -8,9 +8,9 @@ terms:
     - text: wheelie
       status: preferred
   nb:
-    - text: å sykle
+    - text: å sykle på bakhjulet
       status: preferred
-    - text: dra på bakhjulet
+    - text: å dra på bakhjulet
       status: admitted
 definition: {}
 notes: {}
