@@ -60,7 +60,7 @@ Set the build command to `npm run build` and the deploy command to `npm run depl
 
 The checked-in Wrangler configuration publishes the generated `dist` directory as static assets and serves the custom 404 page.
 
-Pull-request previews use public `workers.dev` version and branch URLs, while the production `workers.dev` route remains disabled.
+Pull-request previews use public `workers.dev` commit and branch URLs, while the production `workers.dev` route remains disabled.
 
 No Astro server adapter, database, runtime API, or visitor-facing secret is required.
 
