@@ -6,7 +6,9 @@ Trancycle should launch as a static, bilingual cycling glossary whose canonical 
 
 Astro is the best fit of the four candidate generators because it combines static HTML by default, schema-validated content collections, a built-in image pipeline, and an escape hatch for the small amount of JavaScript needed for search and theme selection.^5 ^6 ^7
 
-GitHub Pages is sufficient hosting for the initial public release because the project is public, non-transactional, very small, and compatible with a custom static-site build through GitHub Actions.^12
+Cloudflare Pages is the preferred production host because the project is fully static and benefits from Cloudflare's global asset distribution, compression, cache controls, custom headers, and branch previews.
+
+GitHub Pages remains a capable fallback, but GitHub should primarily hold the canonical source and contribution workflow.
 
 Airtable should not be queried by visitors or required at build time after migration.
 
@@ -35,10 +37,10 @@ The Airtable base was inspected through its read-only API on 13 September 2026.^
 It contains 147 records distributed as follows:
 
 | Current category | Records | Share |
-|---|---:|---:|
-| component | 118 | 80% |
-| other | 17 | 12% |
-| bike type | 12 | 8% |
+| ---------------- | ------: | ----: |
+| component        |     118 |   80% |
+| other            |      17 |   12% |
+| bike type        |      12 |    8% |
 
 Every record has values in `Name`, `Norwegian`, and `Component`.
 
@@ -231,18 +233,18 @@ The `terms` map is deliberately language-extensible, so later records can add `n
 
 Recommended fields are:
 
-| Field | Purpose |
-|---|---|
-| `id` | Stable concept identifier that never changes with spelling |
-| `slug` | Human-readable, permanent URL segment |
-| `terms.<lang>[]` | Separate preferred, admitted, colloquial, regional, and deprecated forms |
-| `definition.<lang>` | Original definition of the concept, not a synonym list |
-| `notes.<lang>[]` | Usage, ambiguity, dialect, British/American, or technical notes |
-| `domains[]` | Faceted subject classification |
-| `relations` | Typed broader, narrower, and related concept links |
-| `sources[]` | Claim-level references with publisher, URL, and scope |
-| `images[]` | Local path, alt text, caption, creator, source, and license |
-| `review` | Draft/reviewed status, reviewer, and review date |
+| Field               | Purpose                                                                  |
+| ------------------- | ------------------------------------------------------------------------ |
+| `id`                | Stable concept identifier that never changes with spelling               |
+| `slug`              | Human-readable, permanent URL segment                                    |
+| `terms.<lang>[]`    | Separate preferred, admitted, colloquial, regional, and deprecated forms |
+| `definition.<lang>` | Original definition of the concept, not a synonym list                   |
+| `notes.<lang>[]`    | Usage, ambiguity, dialect, British/American, or technical notes          |
+| `domains[]`         | Faceted subject classification                                           |
+| `relations`         | Typed broader, narrower, and related concept links                       |
+| `sources[]`         | Claim-level references with publisher, URL, and scope                    |
+| `images[]`          | Local path, alt text, caption, creator, source, and license              |
+| `review`            | Draft/reviewed status, reviewer, and review date                         |
 
 Use explicit BCP 47 language keys such as `en`, `nb`, and later `nn` rather than the undifferentiated label `Norwegian`.
 
@@ -288,16 +290,16 @@ Every candidate can produce a fast static glossary, so generator benchmarks are 
 
 The meaningful differences are content validation, image handling, contributor ergonomics, deployment complexity, and the ease of adding a small interactive search experience.
 
-| Criterion | Astro | Hugo | Eleventy | Jekyll |
-|---|---|---|---|---|
-| Static HTML | Excellent and default | Excellent | Excellent | Excellent |
-| Structured-content validation | Excellent, schema and generated types | Good, with templates or validation scripts | Flexible, usually custom validation | Basic without custom plugins/scripts |
-| Rich Markdown term pages | Excellent | Excellent | Excellent | Excellent |
-| Local image pipeline | Built in | Built in and very capable | Official plugin available | Additional tooling usually needed |
-| Small client interaction | Straightforward vanilla JS or islands | Straightforward vanilla JS | Straightforward JavaScript | Straightforward vanilla JS |
-| One-language toolchain | Node/TypeScript | Go binary, plus Node if using Pagefind | Node | Ruby, plus Node if using modern search/image tools |
-| GitHub Pages | Custom Action | Custom Action | Custom Action | Native or custom Action |
-| Fit for Trancycle | Best balance | Strong runner-up | Good minimalist option | Viable but fourth choice |
+| Criterion                     | Astro                                 | Hugo                                       | Eleventy                            | Jekyll                                             |
+| ----------------------------- | ------------------------------------- | ------------------------------------------ | ----------------------------------- | -------------------------------------------------- |
+| Static HTML                   | Excellent and default                 | Excellent                                  | Excellent                           | Excellent                                          |
+| Structured-content validation | Excellent, schema and generated types | Good, with templates or validation scripts | Flexible, usually custom validation | Basic without custom plugins/scripts               |
+| Rich Markdown term pages      | Excellent                             | Excellent                                  | Excellent                           | Excellent                                          |
+| Local image pipeline          | Built in                              | Built in and very capable                  | Official plugin available           | Additional tooling usually needed                  |
+| Small client interaction      | Straightforward vanilla JS or islands | Straightforward vanilla JS                 | Straightforward JavaScript          | Straightforward vanilla JS                         |
+| One-language toolchain        | Node/TypeScript                       | Go binary, plus Node if using Pagefind     | Node                                | Ruby, plus Node if using modern search/image tools |
+| GitHub Pages                  | Custom Action                         | Custom Action                              | Custom Action                       | Native or custom Action                            |
+| Fit for Trancycle             | Best balance                          | Strong runner-up                           | Good minimalist option              | Viable but fourth choice                           |
 
 ### Astro
 
