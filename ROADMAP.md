@@ -4,7 +4,9 @@
 
 The first release is a static English–Bokmål glossary with instant local search, permanent concept pages, visible editorial status, and downloadable JSON and CSV data.
 
-The remaining launch work is to migrate and normalize all Airtable records, review ambiguous translations, add original definitions and sources, select licenses, and connect Cloudflare Workers Builds.
+The Airtable records have been migrated as provisional concept files.
+
+The remaining launch work is to normalize ambiguous translations, add original definitions and sources, review image rights, verify the Cloudflare production deployment, and attach the final domain.
 
 ## Phase 2: interactive bicycle map
 

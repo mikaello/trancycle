@@ -54,11 +54,57 @@ const slugify = (value) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "") || "concept";
 
-const splitTerms = (value) =>
-  String(value)
-    .split(/\s*(?:,|\/)\s*/)
-    .map((term) => term.trim())
-    .filter(Boolean);
+const splitOutsideParentheses = (value) => {
+  const parts = [];
+  let current = "";
+  let depth = 0;
+
+  for (const character of String(value)) {
+    if (character === "(") depth += 1;
+    if (character === ")") depth = Math.max(0, depth - 1);
+
+    if ((character === "," || character === "/") && depth === 0) {
+      if (current.trim()) parts.push(current.trim());
+      current = "";
+    } else {
+      current += character;
+    }
+  }
+
+  if (current.trim()) parts.push(current.trim());
+  return parts;
+};
+
+const parseTermField = (value) => {
+  const notes = [];
+  const terms = splitOutsideParentheses(value).map((rawTerm) => {
+    let term = rawTerm;
+    const leadingNote = term.match(/^\(([^)]+)\)\s+(.+)$/);
+    if (leadingNote) {
+      notes.push(leadingNote[1]);
+      term = leadingNote[2];
+    }
+
+    const trailingNote = term.match(/^(.+?)\s+\(([^)]+)\)$/);
+    if (trailingNote) {
+      term = trailingNote[1];
+      notes.push(trailingNote[2]);
+    }
+
+    return term.trim();
+  });
+
+  return {
+    terms: [...new Set(terms.filter(Boolean))],
+    notes: [
+      ...new Set(
+        notes.map(
+          (note) => `${note.charAt(0).toLocaleUpperCase()}${note.slice(1)}.`,
+        ),
+      ),
+    ],
+  };
+};
 
 const domains = {
   component: "Sykkeldeler og utstyr",
@@ -69,24 +115,41 @@ const domains = {
 const sorted = [...records].sort((left, right) =>
   left.id.localeCompare(right.id),
 );
-const slugCounts = new Map();
-const normalized = sorted.map((record) => {
-  const baseSlug = slugify(record.fields.Name);
-  const number = (slugCounts.get(baseSlug) ?? 0) + 1;
-  slugCounts.set(baseSlug, number);
+const parsedRecords = sorted.map((record) => ({
+  record,
+  english: parseTermField(record.fields.Name),
+  bokmal: parseTermField(record.fields.Norwegian),
+}));
+const baseSlugCounts = new Map();
+for (const { english } of parsedRecords) {
+  const baseSlug = slugify(english.terms[0]);
+  baseSlugCounts.set(baseSlug, (baseSlugCounts.get(baseSlug) ?? 0) + 1);
+}
+
+const usedSlugs = new Set();
+const normalized = parsedRecords.map(({ record, english, bokmal }) => {
+  const baseSlug = slugify(english.terms[0]);
+  let slug = baseSlug;
+  if (baseSlugCounts.get(baseSlug) > 1) {
+    slug = `${baseSlug}-${slugify(bokmal.terms[0])}`;
+  }
+  if (usedSlugs.has(slug))
+    slug = `${slug}-${record.id.slice(-6).toLocaleLowerCase("en")}`;
+  usedSlugs.add(slug);
+
   return {
     record,
-    id: `tc-${record.id.slice(3).toLocaleLowerCase("en")}`,
-    slug: number === 1 ? baseSlug : `${baseSlug}-${number}`,
+    english,
+    bokmal,
+    id: slug,
+    slug,
   };
 });
 const idByRecord = new Map(normalized.map(({ record, id }) => [record.id, id]));
 
 await mkdir(outputDirectory, { recursive: true });
 
-for (const { record, id, slug } of normalized) {
-  const english = splitTerms(record.fields.Name);
-  const bokmal = splitTerms(record.fields.Norwegian);
+for (const { record, english, bokmal, id, slug } of normalized) {
   const category = String(record.fields.Component ?? "other").toLocaleLowerCase(
     "en",
   );
@@ -106,9 +169,12 @@ for (const { record, id, slug } of normalized) {
     id,
     slug,
     domains: [domains[category] ?? "Andre sykkelbegrep"],
-    terms: { en: toVariants(english), nb: toVariants(bokmal) },
+    terms: { en: toVariants(english.terms), nb: toVariants(bokmal.terms) },
     definition: {},
-    notes: {},
+    notes: {
+      ...(english.notes.length ? { en: english.notes } : {}),
+      ...(bokmal.notes.length ? { nb: bokmal.notes } : {}),
+    },
     relations: { broader: [], narrower: [], related },
     sources: [],
     review: { status: "provisional" },

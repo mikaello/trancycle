@@ -8,7 +8,10 @@ test("the canonical concept files pass relation and review validation", () => {
     encoding: "utf8",
   });
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Validated \d+ concept file/);
+  const count = Number(
+    result.stdout.match(/Validated (\d+) concept file/)?.[1],
+  );
+  assert.ok(count >= 147, `Expected at least 147 concepts, received ${count}.`);
 });
 
 test("the importer keeps Airtable credentials outside source", async () => {
