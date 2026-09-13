@@ -2,6 +2,7 @@ import { mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { stringify } from "yaml";
+import { parseTermField } from "./parse-airtable-terms.mjs";
 
 const baseId = "appKqB3M4u8nH45um";
 const tableId = "tblWCCuYItI28FZyL";
@@ -53,58 +54,6 @@ const slugify = (value) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "") || "concept";
-
-const splitOutsideParentheses = (value) => {
-  const parts = [];
-  let current = "";
-  let depth = 0;
-
-  for (const character of String(value)) {
-    if (character === "(") depth += 1;
-    if (character === ")") depth = Math.max(0, depth - 1);
-
-    if ((character === "," || character === "/") && depth === 0) {
-      if (current.trim()) parts.push(current.trim());
-      current = "";
-    } else {
-      current += character;
-    }
-  }
-
-  if (current.trim()) parts.push(current.trim());
-  return parts;
-};
-
-const parseTermField = (value) => {
-  const notes = [];
-  const terms = splitOutsideParentheses(value).map((rawTerm) => {
-    let term = rawTerm;
-    const leadingNote = term.match(/^\(([^)]+)\)\s+(.+)$/);
-    if (leadingNote) {
-      notes.push(leadingNote[1]);
-      term = leadingNote[2];
-    }
-
-    const trailingNote = term.match(/^(.+?)\s+\(([^)]+)\)$/);
-    if (trailingNote) {
-      term = trailingNote[1];
-      notes.push(trailingNote[2]);
-    }
-
-    return term.trim();
-  });
-
-  return {
-    terms: [...new Set(terms.filter(Boolean))],
-    notes: [
-      ...new Set(
-        notes.map(
-          (note) => `${note.charAt(0).toLocaleUpperCase()}${note.slice(1)}.`,
-        ),
-      ),
-    ],
-  };
-};
 
 const domains = {
   component: "Sykkeldeler og utstyr",
