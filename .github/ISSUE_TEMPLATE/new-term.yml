@@ -1,0 +1,63 @@
+name: Suggest a new cycling term
+description: Propose a cycling meaning that Trancycle does not cover yet.
+title: "term: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping Trancycle grow.
+        Plain-language answers are welcome, and you do not need to know the internal data format.
+  - type: input
+    id: term
+    attributes:
+      label: Term
+      description: Enter the word or phrase as it is used.
+      placeholder: headset
+    validations:
+      required: true
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      description: Enter the language and language code if you know it.
+      placeholder: English (en)
+    validations:
+      required: true
+  - type: textarea
+    id: meaning
+    attributes:
+      label: Cycling meaning
+      description: Explain what this term refers to and distinguish it from other possible meanings.
+      placeholder: The bearing assembly that lets the fork rotate in the frame's head tube.
+    validations:
+      required: true
+  - type: textarea
+    id: translations
+    attributes:
+      label: Known translations
+      description: Add translations or alternatives in any language, with usage or regional notes when relevant.
+      placeholder: "Norwegian Bokmål (nb): styrelager"
+  - type: input
+    id: domain
+    attributes:
+      label: Cycling area
+      description: Name the relevant component group, discipline, technique, tool, or other context.
+      placeholder: Frame, fork, and steering
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Link to dictionaries, manuals, standards, governing bodies, or established cycling references that support the suggestion.
+      placeholder: One source URL per line, with a short note about what it supports.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Add spelling variants, colloquial use, image links, or anything else that helps review the suggestion.
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: Rights check
+      options:
+        - label: I have not pasted copyrighted descriptions or attached images without permission.
+          required: true
