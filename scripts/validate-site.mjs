@@ -4,6 +4,20 @@ import path from "node:path";
 import { gzipSync } from "node:zlib";
 
 const root = path.resolve("dist");
+const basePath = process.env.ASTRO_BASE
+  ? `/${process.env.ASTRO_BASE.replace(/^\/+|\/+$/g, "")}/`
+  : "/";
+const distPath = (urlPath) => {
+  const withoutBase =
+    basePath === "/"
+      ? urlPath
+      : urlPath === basePath.slice(0, -1)
+        ? "/"
+        : urlPath.startsWith(basePath)
+          ? urlPath.slice(basePath.length - 1)
+          : urlPath;
+  return path.join(root, decodeURIComponent(withoutBase));
+};
 async function walk(directory) {
   const results = await Promise.all(
     (await readdir(directory, { withFileTypes: true })).map((entry) =>
@@ -35,7 +49,7 @@ for (const [file, html] of documents) {
     const raw = match[1].replaceAll("&amp;", "&");
     const url = new URL(raw, pageUrl);
     if (url.origin !== pageUrl.origin) continue;
-    let target = path.join(root, decodeURIComponent(url.pathname));
+    let target = distPath(url.pathname);
     if (url.pathname.endsWith("/")) target = path.join(target, "index.html");
     assert.ok(await stat(target).catch(() => false), `${file}: missing ${raw}`);
     if (url.hash && documents.has(target)) {
@@ -71,7 +85,11 @@ for (const [file, html] of documents) {
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
     if (/type="application\/(?:ld\+)?json"/.test(match[1])) continue;
     const src = match[1].match(/src="([^" ]+)"/)?.[1];
-    scripts.push(src ? await readFile(path.join(root, src), "utf8") : match[2]);
+    scripts.push(
+      src
+        ? await readFile(distPath(new URL(src, pageUrl).pathname), "utf8")
+        : match[2],
+    );
   }
   assert.ok(scripts.length > 0, `${file}: missing progressive enhancement`);
   // Astro may inline small scripts, so measure inline and external code together.
