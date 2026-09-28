@@ -90,6 +90,16 @@ Read secrets only from environment variables in one-time migration tooling.
 
 Verify that no credential or expiring Airtable attachment URL appears in source, history, or generated output.
 
+## Deployment paths
+
+Cloudflare Workers is the review target and serves the site from the root path.
+
+GitHub Pages mirrors production from `main` or manual dispatch at `/trancycle/`.
+
+Use `sitePath()` for internal page and asset URLs so both hosts work.
+
+Validate both variants with the root build and the `ASTRO_BASE=/trancycle` build before pushing.
+
 ## Git and quality
 
 Start new tasks from the latest `main` on a fresh hyphenated branch.

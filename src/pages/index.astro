@@ -5,6 +5,7 @@ import {
   allSearchText,
   byPreferredTerm,
   preferredTerm,
+  sitePath,
   termHref,
 } from "../lib/terms";
 
@@ -20,7 +21,7 @@ const termSetData = {
   hasDefinedTerm: terms.map((entry) => ({
     "@type": "DefinedTerm",
     name: preferredTerm(entry, "en"),
-    inDefinedTermSet: "/",
+    inDefinedTermSet: sitePath("/"),
     url: termHref(entry),
   })),
 };
@@ -83,7 +84,7 @@ const termSetData = {
       </noscript>
     </div>
 
-    <a class="explore-entry" href="/explore/">
+    <a class="explore-entry" href={sitePath("/explore/")}>
       <span>
         <strong>Vet du hvordan delen ser ut?</strong>
         <small>
