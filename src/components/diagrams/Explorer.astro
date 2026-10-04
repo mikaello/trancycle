@@ -10,6 +10,7 @@ import {
   preferredTerm,
   alternativeTerms,
   termHref,
+  sitePath,
   languageNames,
   type TermEntry,
 } from "../../lib/terms";
@@ -48,7 +49,7 @@ const name = (entry: TermEntry) =>
   <nav class="diagram-nav" aria-label="Sykkeltegninger">
     {diagrams.map((view, i) => (
       <a
-        href={diagramHref(view.id)}
+        href={sitePath(diagramHref(view.id))}
         aria-current={view.id === diagram.id ? "page" : undefined}
       >
         <span aria-hidden="true">0{i + 1}</span>
@@ -165,7 +166,9 @@ const name = (entry: TermEntry) =>
               {diagramsForConcept(part.conceptId)
                 .filter((view) => view.id !== diagram.id)
                 .map((view) => (
-                  <a href={`${diagramHref(view.id)}#part-${part.conceptId}`}>
+                  <a
+                    href={`${sitePath(diagramHref(view.id))}#part-${part.conceptId}`}
+                  >
                     Se i {view.title.toLocaleLowerCase("nb")} →
                   </a>
                 ))}
@@ -199,7 +202,7 @@ const name = (entry: TermEntry) =>
           </li>
         ))}
       </ol>
-      <a class="explorer-search-link" href="/">
+      <a class="explorer-search-link" href={sitePath("/")}>
         Søk i hele ordlisten →
       </a>
     </aside>

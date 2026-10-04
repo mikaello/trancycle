@@ -6,6 +6,7 @@ import {
   alternativeTerms,
   languageNames,
   preferredTerm,
+  sitePath,
   termHref,
   type TermEntry,
 } from "../../lib/terms";
@@ -40,10 +41,10 @@ const correctionTitle = encodeURIComponent(
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "DefinedTerm",
-  "@id": `/term/${data.slug}/#concept`,
+  "@id": sitePath(`/term/${data.slug}/#concept`),
   name: preferredTerm(entry, "en"),
   description: data.definition.nb ?? data.definition.en,
-  inDefinedTermSet: "/",
+  inDefinedTermSet: sitePath("/"),
   termCode: data.id,
 };
 ---
@@ -58,7 +59,7 @@ const structuredData = {
 >
   <article class="concept shell">
     <nav class="breadcrumb" aria-label="Brødsmuler">
-      <a href="/">Ordlisten</a>
+      <a href={sitePath("/")}>Ordlisten</a>
       <span>/</span>
       <span>{data.id}</span>
     </nav>
@@ -107,7 +108,7 @@ const structuredData = {
     {diagramsForConcept(data.id).length > 0 && (
       <nav class="concept-diagrams" aria-label="Finn delen i en tegning">
         {diagramsForConcept(data.id).map((diagram) => (
-          <a href={`${diagramHref(diagram.id)}#part-${data.id}`}>
+          <a href={`${sitePath(diagramHref(diagram.id))}#part-${data.id}`}>
             Se i tegningen: {diagram.title} →
           </a>
         ))}
