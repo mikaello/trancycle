@@ -8,6 +8,9 @@
   // Keep observability on Cloudflare's included native dashboard services.
   "observability": {
     "enabled": true,
+    "issues": {
+      "enabled": true,
+    },
     "logs": {
       "enabled": true,
       "invocation_logs": true,
